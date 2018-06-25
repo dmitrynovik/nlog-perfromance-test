@@ -8,8 +8,8 @@ namespace NlogPerformanceTest
     {
         static void Main(string[] args)
         {
-            int tasks = ParseCommandLine(args, "--tasks") ?? 1000;
-            int delay = ParseCommandLine(args, "--delay") ?? 1;
+            int tasks = ParseCommandLine(args, "--tasks") ?? 10000;
+            int delay = ParseCommandLine(args, "--delay") ?? 0;
 
             var logger = LogManager.GetCurrentClassLogger();
 
@@ -18,11 +18,11 @@ namespace NlogPerformanceTest
             logger.Info("End");
         }
 
-        private static async Task RunTasks(Logger logger, int tasks, int delay)
+        private static async Task RunTasks(ILogger logger, int tasks, int delay)
         {
             for (int i = 0; i < tasks; ++i)
             {
-                Task.Run(() => logger.Info($"Task {i}"));
+                await Task.Run(() => logger.Info($"Task {i}", TaskCreationOptions.LongRunning));
                 await Task.Delay(delay);
             }
         }
