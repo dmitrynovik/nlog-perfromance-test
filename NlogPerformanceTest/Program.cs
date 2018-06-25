@@ -13,16 +13,16 @@ namespace NlogPerformanceTest
 
             var logger = LogManager.GetCurrentClassLogger();
 
-            logger.Info("Start");
+            logger.Info("Start ...");
             RunTasks(logger, tasks, delay).GetAwaiter().GetResult();
-            logger.Info("End");
+            logger.Info("... End");
         }
 
         private static async Task RunTasks(ILogger logger, int tasks, int delay)
         {
             for (int i = 0; i < tasks; ++i)
             {
-                await Task.Run(() => logger.Info($"Task {i}", TaskCreationOptions.LongRunning));
+                await Task.Run(() => logger.Info($"\tTask {i}", TaskCreationOptions.LongRunning));
                 await Task.Delay(delay);
             }
         }
@@ -30,10 +30,7 @@ namespace NlogPerformanceTest
         private static int? ParseCommandLine(string[] args, string name)
         {
             var arg = args.FirstOrDefault(x => x.StartsWith(name));
-            if (arg == null)
-                return null;
-
-            if (int.TryParse(arg.Substring(name.Length), out var value))
+            if (arg != null && int.TryParse(arg.Substring(name.Length), out var value))
             {
                 return value;
             }
