@@ -12,15 +12,16 @@ namespace NlogPerformanceTest
             int delay = ParseCommandLine(args, "--delay") ?? 0;
 
             var logger = LogManager.GetCurrentClassLogger();
-
             logger.Info("Start ...");
+
             RunTasks(logger, tasks, delay).GetAwaiter().GetResult();
+
             logger.Info("... End");
         }
 
         private static async Task RunTasks(ILogger logger, int tasks, int delay)
         {
-            for (int i = 0; i < tasks; ++i)
+            for (int i = 1; i <= tasks; ++i)
             {
                 await Task.Run(() => logger.Info($"\tTask {i}", TaskCreationOptions.LongRunning));
                 await Task.Delay(delay);
